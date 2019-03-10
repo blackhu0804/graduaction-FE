@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-content">
     <header>
       <h1>
         <div>
@@ -69,7 +69,6 @@
             :model="queryParam"
             :rules="rules"
             class="login-form"
-            @keyup.native.enter="login"
           >
             <el-form-item class="form-item" prop="username">
               <el-input
@@ -94,7 +93,7 @@
               </p>
             </el-form-item>
             <el-form-item class="wjmm">
-              <p class="forget">忘记密码？</p>
+              <p @click="forget" class="forget">忘记密码？</p>
             </el-form-item>
             <el-form-item class="submit-item">
               <el-button
@@ -115,9 +114,7 @@
 </template>
 
 <script>
-// import * as util from "@/assets/util.js";
-// import * as account from "@/api/account";
-// import { instance } from "@/api";
+import * as account from "../api/account.js";
 
 export default {
   data() {
@@ -137,7 +134,19 @@ export default {
     };
   },
   methods: {
-    login() {}
+    login() {
+      account.login(this.queryParam).then(res => {
+        // console.log(res.data.data.attemps.id);
+        if (res.data.data.attemps.username) {
+          // this.$router.replace("/forget");
+        }
+      });
+    },
+    forget() {
+      account.isLogin().then(res => {
+        console.log(res.data);
+      });
+    }
   }
 };
 </script>

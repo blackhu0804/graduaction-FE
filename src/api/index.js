@@ -3,17 +3,18 @@ import * as util from "../assets/utils";
 
 const URLHASH = {
   mock: "",
-  dev: "",
+  dev: "http://127.0.0.1:7001",
   test: ""
 };
 
-export const baseURL = URLHASH.mock;
+export const baseURL = URLHASH.dev;
 
 export const instance = axios.create({
   baseURL,
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    credentials: "include"
   }
 });
 
@@ -29,7 +30,7 @@ instance.interceptors.request.use(
 
 //错误处理
 instance.interceptors.response.use(function(response) {
-  if (response.data.status != 200) {
+  if (response.data.code != 0) {
     return util.catchError(response);
   }
   return response;

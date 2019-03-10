@@ -16,6 +16,12 @@ export default new Router({
       component: resolve => {
         require(["../views/common/404.vue"], resolve);
       }
+    },
+    {
+      path: "/login",
+      component: resolve => {
+        require(["../views/login.vue"], resolve);
+      }
     }
   ]
 });

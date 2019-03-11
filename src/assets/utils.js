@@ -91,33 +91,29 @@ export const catchError = function(error) {
   }
   //原生错误对象
   if (error.response) {
-    switch (error.response.status) {
+    switch (error.response.data.code) {
       case 400:
         Vue.prototype.$message({
-          message: error.response.statusCode || "请求参数异常",
+          message: error.response.code || "请求参数异常",
           type: "error"
         });
         break;
       case 401:
         sessionStorage.removeItem("user");
         Vue.prototype.$message({
-          message: error.response.statusCode || "密码错误或账号不存在！",
-          type: "warning",
-          onClose: function() {
-            storage("user", "");
-            location.reload();
-          }
+          message: error.response.code || "密码错误或账号不存在！",
+          type: "warning"
         });
         break;
       case 403:
         Vue.prototype.$message({
-          message: error.response.statusCode || "无访问权限，请联系企业管理员",
+          message: error.response.code || "无访问权限，请联系企业管理员",
           type: "warning"
         });
         break;
       default:
         Vue.prototype.$message({
-          message: error.response.statusCode || "服务端异常，请联系技术支持",
+          message: error.response.code || "服务端异常，请联系技术支持",
           type: "error"
         });
     }

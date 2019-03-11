@@ -6,15 +6,14 @@ const URLHASH = {
   dev: "http://127.0.0.1:7001",
   test: ""
 };
-
+axios.defaults.withCredentials = true;
 export const baseURL = URLHASH.dev;
 
 export const instance = axios.create({
   baseURL,
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json",
-    credentials: "include"
+    "Content-Type": "application/json"
   }
 });
 

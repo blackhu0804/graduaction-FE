@@ -10,8 +10,37 @@
 
     <div class="data-center">
       <el-row>
-        <el-col :span="8"> 8</el-col>
-        <el-col :span="16"> 16</el-col>
+        <el-col :span="8">
+          <div
+            class="block block-1"
+            :class="{
+              'animated fadeInLeft delay2': animation == true,
+              'animated fadeOutLeft': animation == false
+            }"
+          >
+            1
+          </div>
+          <div
+            class="block block-2"
+            :class="{
+              'animated fadeInUp delay2': animation == true,
+              'animated fadeOutUp': animation == false
+            }"
+          >
+            2
+          </div>
+        </el-col>
+        <el-col :span="16">
+          <div
+            class="block block-3"
+            :class="{
+              'animated fadeInRight delay2': animation == true,
+              'animated fadeOutRight': animation == false
+            }"
+          >
+            3
+          </div>
+        </el-col>
       </el-row>
     </div>
   </div>
@@ -22,7 +51,8 @@ import * as util from "../assets/utils.js";
 export default {
   data() {
     return {
-      username: ""
+      username: "",
+      animation: true
     };
   },
   methods: {},
@@ -33,8 +63,6 @@ export default {
 </script>
 
 <style>
-.main-page {
-}
 .main-page header {
   height: 70px;
   line-height: 70px;
@@ -51,5 +79,22 @@ export default {
 .main-page header .content h1 {
   color: #396b9e;
   text-shadow: 0.1em 0.1em 0.05em #293944;
+}
+.data-center .block {
+  border: 1px solid #ddd;
+}
+.data-center .block-1 {
+  width: 100%;
+  height: 300px;
+}
+.data-center .block-2 {
+  width: 100%;
+  height: 360px;
+  margin-top: 20px;
+}
+.data-center .block-3 {
+  width: 100%;
+  margin-left: 20px;
+  height: 680px;
 }
 </style>

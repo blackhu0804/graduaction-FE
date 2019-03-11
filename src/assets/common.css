@@ -147,6 +147,7 @@ th {
 }
 * {
   word-break: break-all;
+  box-sizing: border-box;
 }
 .digital {
   /* font-family:"digital" !important; */
@@ -320,5 +321,5 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 .data-center {
-  padding: 40px 100px;
+  padding: 20px 50px;
 }

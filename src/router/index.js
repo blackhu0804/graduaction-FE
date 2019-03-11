@@ -16,6 +16,11 @@ export default new Router({
           path: "/forget",
           name: "找回密码",
           component: resolve => require(["../views/login_forget.vue"], resolve)
+        },
+        {
+          path: "/register",
+          name: "注册",
+          component: resolve => require(["../views/register.vue"], resolve)
         }
       ]
     },

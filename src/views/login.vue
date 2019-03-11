@@ -93,7 +93,7 @@
               </p>
             </el-form-item>
             <div class="wjmm flex-row">
-              <p class="register">还没有账号?点击注册</p>
+              <p @click="register" class="register">还没有账号?点击注册</p>
               <p @click="forget" class="forget">忘记密码？</p>
             </div>
             <el-form-item class="submit-item">
@@ -145,6 +145,9 @@ export default {
     },
     forget() {
       this.$router.push({ path: "/forget" });
+    },
+    register() {
+      this.$router.push({ path: "/register" });
     }
   }
 };
@@ -259,8 +262,8 @@ header h1 div {
 }
 .map .location-8 {
   position: relative;
-  left: 420px;
-  top: 185px;
+  left: 470px;
+  top: 210px;
 }
 .map .location > img {
   position: absolute;

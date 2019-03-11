@@ -1,6 +1,6 @@
 <template>
-  <div class="login-forget">
-    <login-box v-if="step === 1" title="找回密码">
+  <div class="register">
+    <login-box title="注册">
       <el-form
         :hide-required-asterisk="true"
         trim
@@ -9,6 +9,18 @@
         :rules="rules"
         label-width="90px"
       >
+        <el-form-item
+          label="用户名："
+          class="form-item align-center"
+          type="flex"
+          prop="username"
+        >
+          <el-input
+            v-model="ruleForm.username"
+            placeholder="输入用户名"
+            class="input-normal"
+          ></el-input>
+        </el-form-item>
         <el-form-item
           label="邮箱："
           class="form-item align-center send"
@@ -35,60 +47,41 @@
           type="flex"
           prop="numberCode"
         >
-          <label for></label>
           <el-input
             v-model="ruleForm.numberCode"
             placeholder="输入验证码"
             class="input-normal"
           ></el-input>
         </el-form-item>
-        <el-row type="flex" class="btn-content">
-          <el-button @click="next('ruleForm')" class="btn submit-button"
-            >下一步</el-button
-          >
-          <el-button @click="cancel" class="btn cancel-button">关闭</el-button>
-        </el-row>
-      </el-form>
-    </login-box>
-
-    <login-box v-if="step === 2" title="找回密码">
-      <el-form
-        :hide-required-asterisk="true"
-        trim
-        :model="ruleForm"
-        ref="ruleForm"
-        :rules="rules2"
-        label-width="100px"
-      >
         <el-form-item
-          label="输入新密码"
-          class="form-item align-center send"
+          label="密码："
+          class="form-item align-center"
           type="flex"
           prop="password"
         >
           <el-input
-            type="password"
             v-model="ruleForm.password"
-            placeholder="输入新密码"
+            placeholder="输入密码"
             class="input-normal"
+            type="password"
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="确认密码"
+          label="确认密码："
           class="form-item align-center"
           type="flex"
           prop="password2"
         >
           <el-input
-            type="password"
             v-model="ruleForm.password2"
-            placeholder="再次输入密码"
+            placeholder="第二次输入密码"
             class="input-normal"
+            type="password"
           ></el-input>
         </el-form-item>
         <el-row type="flex" class="btn-content">
-          <el-button @click="correct('ruleForm')" class="btn submit-button sure"
-            >确定</el-button
+          <el-button @click="register('ruleForm')" class="btn submit-button"
+            >注册</el-button
           >
           <el-button @click="cancel" class="btn cancel-button">关闭</el-button>
         </el-row>
@@ -122,19 +115,21 @@ export default {
         time: 60
       },
       ruleForm: {
+        username: "",
         email: "",
         numberCode: "",
         password: "",
         password2: ""
       },
       rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" }
+        ],
         email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
         numberCode: [
           { required: true, message: "请输入邮箱验证码", trigger: "blur" },
           { min: 6, max: 6, message: "请输入6位验证码", trigger: "blur" }
-        ]
-      },
-      rules2: {
+        ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           {
@@ -154,47 +149,37 @@ export default {
           },
           { validator: checkPassword, trigger: "blur" }
         ]
-      },
-      step: 1
+      }
     };
   },
   methods: {
-    next(name) {
+    register(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
           account
-            .checkCode({
-              email: this.ruleForm.email,
-              code: this.ruleForm.numberCode
-            })
-            .then(res => {
-              if (res.data.code === 0) {
-                this.step = 2;
-              }
-            });
-        } else {
-          return false;
-        }
-      });
-    },
-    correct(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          account
-            .retrieve({
+            .register({
+              username: this.ruleForm.username,
               email: this.ruleForm.email,
               code: this.ruleForm.numberCode,
               password: this.ruleForm.password
             })
             .then(res => {
-              this.$message({
-                message: res.data.msg,
-                type: "success",
-                duration: 1500,
-                onClose: () => {
-                  this.$router.push({ path: "/login" });
-                }
-              });
+              if (res.data.code === 0) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "success",
+                  duration: 1500,
+                  onClose: () => {
+                    this.$router.push({ path: "/login" });
+                  }
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error",
+                  duration: 1500
+                });
+              }
             });
         } else {
           return false;
@@ -210,7 +195,7 @@ export default {
         return false;
       }
       account
-        .sendVerifyCode({ email: this.ruleForm.email, type: 1 })
+        .sendVerifyCode({ email: this.ruleForm.email, type: 0 })
         .then(res => {
           if (res.data.code === 0) {
             this.$message.success(res.data.msg);
@@ -245,10 +230,13 @@ export default {
   width: 300px;
   margin-left: 90px;
 }
-.login-forget .send {
+.register {
+  margin-top: -50px;
+}
+.register .send {
   position: relative;
 }
-.login-forget .get-code {
+.register .get-code {
   position: absolute;
   right: 15px;
   top: 8px;
@@ -257,13 +245,13 @@ export default {
   background-color: #f48b25;
   border: rgb(245, 120, 3);
 }
-.login-forget .get-code.is-disabled {
+.register .get-code.is-disabled {
   background-color: #eee;
   color: #aaa;
 }
 </style>
 <style>
-.login-forget .el-input__inner {
+.register .el-input__inner {
   height: 45px;
   border-radius: 10px;
   box-shadow: 1px 1px 3px #444;

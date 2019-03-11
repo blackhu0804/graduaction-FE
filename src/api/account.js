@@ -11,7 +11,7 @@ export const login = params => {
 };
 
 // 注册
-export const signIn = params => {
+export const register = params => {
   return instance.post(`/user`, params);
 };
 

@@ -36,3 +36,7 @@ export const retrieve = params => {
 export const sendVerifyCode = params => {
   return instance.post(`/sendVerifyCode`, params);
 };
+
+export const checkCode = params => {
+  return instance.post(`/checkCode`, params);
+};

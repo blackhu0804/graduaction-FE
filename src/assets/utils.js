@@ -86,11 +86,19 @@ export const formatDate = (value, fmt) => {
 //ajax错误处理
 export const catchError = function(error) {
   //业务代码拦截
+  console.log(error);
   if (error.data) {
     error.response = error.data;
   }
   //原生错误对象
   if (error.response) {
+    if (error.response.code === -1) {
+      Vue.prototype.$message({
+        message: error.response.msg || "接口请求错误",
+        type: "error"
+      });
+      return;
+    }
     switch (error.response.data.code) {
       case 400:
         Vue.prototype.$message({

@@ -92,9 +92,10 @@
                 <i class="iconfont">&#xe663;</i>
               </p>
             </el-form-item>
-            <el-form-item class="wjmm">
+            <div class="wjmm flex-row">
+              <p class="register">还没有账号?点击注册</p>
               <p @click="forget" class="forget">忘记密码？</p>
-            </el-form-item>
+            </div>
             <el-form-item class="submit-item">
               <el-button
                 class="submit-button"
@@ -143,9 +144,7 @@ export default {
       });
     },
     forget() {
-      account.isLogin().then(res => {
-        console.log(res.data);
-      });
+      this.$router.push({ path: "/forget" });
     }
   }
 };
@@ -413,10 +412,10 @@ header h1 div {
 .remember {
   color: #fff;
 }
-.forget {
+.forget,
+.register {
   color: #fff;
   cursor: pointer;
-  text-align: right;
   line-height: 20px;
   margin-bottom: 3px;
 }
@@ -434,6 +433,7 @@ header h1 div {
 .wjmm {
   margin-top: -7px;
   padding-bottom: 10px;
+  justify-content: space-between;
 }
 </style>
 

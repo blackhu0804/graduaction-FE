@@ -116,7 +116,7 @@
 
 <script>
 import * as account from "../api/account.js";
-
+import * as util from "../assets/utils.js";
 export default {
   data() {
     return {
@@ -137,9 +137,9 @@ export default {
   methods: {
     login() {
       account.login(this.queryParam).then(res => {
-        // console.log(res.data.data.attemps.id);
+        util.storage("user", res.data.data.user.username);
         if (res.data.data.attemps.username) {
-          // this.$router.replace("/forget");
+          this.$router.replace("/index");
         }
       });
     },

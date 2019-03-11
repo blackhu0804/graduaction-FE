@@ -11,7 +11,7 @@ export default {
   methods: {
     checkLogin() {
       account.isLogin().then(res => {
-        if (res.data.code === 0) {
+        if (!res.data.data.hasLogin) {
           this.$router.replace("/login");
         }
       });

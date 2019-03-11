@@ -25,6 +25,13 @@ export default new Router({
       ]
     },
     {
+      path: "/index",
+      name: "首页",
+      component: resolve => {
+        require(["../views/main_page.vue"], resolve);
+      }
+    },
+    {
       path: "/401",
       name: "无权访问",
       component: resolve => {

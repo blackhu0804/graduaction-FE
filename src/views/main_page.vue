@@ -79,8 +79,9 @@
           >
             <div class="corner"></div>
             <div class="hd fix">
-              <h2 class="title l">3</h2>
+              <h2 class="title l">全国热门城市职位分布</h2>
             </div>
+            <div id="work-map" class="bd flex-1 chart-content"></div>
           </div>
         </el-col>
         <el-col :span="6" class="el-col-block1">
@@ -104,35 +105,134 @@
 
 <script>
 import * as util from "../assets/utils.js";
-const echarts = require("echarts");
+import echarts from "echarts";
+import "echarts/map/js/china.js";
+import location from "../assets/location.js";
 import { setInterval, setTimeout } from "timers";
 export default {
   data() {
     return {
       username: "",
       animation: true,
-      time: new Date()
+      time: new Date(),
+      location: location.data
     };
   },
   methods: {
+    // 当前城市职位分析
     initWorkSum() {
       var myChart = echarts.init(document.getElementById("work-sum"));
       myChart.setOption({
+        tooltip: {
+          trigger: "item",
+          formatter: "{b} : {c} ({d}%)"
+        },
         series: [
           {
-            name: "访问来源",
             type: "pie",
-            radius: "50%",
+            radius: "80%",
+            center: ["50%", "50%"],
             data: [
-              { value: 235, name: "视频广告" },
-              { value: 274, name: "联盟广告" },
-              { value: 310, name: "邮件营销" },
-              { value: 335, name: "直接访问" },
-              { value: 400, name: "搜索引擎" }
+              { value: 335, name: "前端" },
+              { value: 310, name: "后端" },
+              { value: 234, name: "大数据" },
+              { value: 135, name: "算法" },
+              { value: 1548, name: "运维" }
             ]
           }
         ]
       });
+    },
+
+    initWorkMap() {
+      let geoCoordMap = this.location;
+      var convertData = function(data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+          var geoCoord = geoCoordMap[data[i].name];
+          if (geoCoord) {
+            res.push({
+              name: data[i].name,
+              value: geoCoord.concat(data[i].value)
+            });
+          }
+        }
+        return res;
+      };
+
+      let option = {
+        title: {
+          text: "全国热门城市职位数量",
+          subtext: "data from Boss直聘",
+          x: "center",
+          textStyle: {
+            color: "#fff"
+          }
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: function(params) {
+            return params.name + " : " + params.value[2];
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: 20,
+          calculable: true,
+          inRange: {
+            color: ["#50a3ba", "#eac736", "#d94e5d"]
+          },
+          textStyle: {
+            color: "#fff"
+          }
+        },
+        geo: {
+          map: "china",
+          label: {
+            emphasis: {
+              show: false
+            }
+          },
+          zoom: 1.2,
+          itemStyle: {
+            normal: {
+              areaColor: "#323c48",
+              borderColor: "#111"
+            },
+            emphasis: {
+              areaColor: "#2a333d"
+            }
+          }
+        },
+        series: [
+          {
+            name: "pm2.5",
+            type: "scatter",
+            coordinateSystem: "geo",
+            data: convertData([
+              { name: "北京", value: 10 },
+              { name: "广州", value: 20 }
+            ]),
+            symbolSize: 12,
+            label: {
+              normal: {
+                show: false
+              },
+              emphasis: {
+                show: false
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                borderColor: "#fff",
+                borderWidth: 1
+              }
+            }
+          }
+        ]
+      };
+      var chartMap = echarts.init(document.getElementById("work-map"));
+      chartMap.setOption(option);
     }
   },
   created() {
@@ -143,6 +243,7 @@ export default {
   },
   mounted() {
     this.initWorkSum();
+    this.initWorkMap();
   }
 };
 </script>
@@ -222,7 +323,8 @@ export default {
 .chart-content {
   color: #fff;
 }
-.block-3 .chart-content {
+.block-3 .chart-content,
+.block-4 .chart-content {
   height: calc(100% - 34px);
 }
 </style>

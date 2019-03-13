@@ -86,7 +86,6 @@ export const formatDate = (value, fmt) => {
 //ajax错误处理
 export const catchError = function(error) {
   //业务代码拦截
-  console.log(error);
   if (error.data) {
     error.response = error.data;
   }

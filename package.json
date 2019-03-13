@@ -12,9 +12,10 @@
     "axios": "^0.18.0",
     "echarts": "^4.1.0",
     "element-ui": "^2.6.1",
-    "v-charts": "^1.19.0",
+    "moment": "^2.24.0",
     "vue": "^2.6.6",
-    "vue-router": "^3.0.2"
+    "vue-router": "^3.0.2",
+    "zrender": "^4.0.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",

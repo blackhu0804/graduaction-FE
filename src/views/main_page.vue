@@ -94,8 +94,22 @@
           >
             <div class="corner"></div>
             <div class="hd fix">
-              <h2 class="title l">4</h2>
+              <h2 class="title l">当前城市职位薪资分布</h2>
             </div>
+            <div id="work-salary" class="bd flex-1 chart-content"></div>
+          </div>
+          <div
+            class="comBox block block-6"
+            :class="{
+              'animated fadeInUp delay2': animation == true,
+              'animated fadeOutUp': animation == false
+            }"
+          >
+            <div class="corner"></div>
+            <div class="hd fix">
+              <h2 class="title l">职位词云</h2>
+            </div>
+            <div id="work-wordcloud" class="bd flex-1 chart-content"></div>
           </div>
         </el-col>
       </el-row>
@@ -109,6 +123,7 @@ import echarts from "echarts";
 import "echarts/map/js/china.js";
 import location from "../assets/location.js";
 import { setInterval } from "timers";
+require("echarts-wordcloud");
 export default {
   data() {
     return {
@@ -145,6 +160,7 @@ export default {
       });
     },
 
+    // 地图城市职位分布
     initWorkMap() {
       let geoCoordMap = this.location;
       var convertData = function(data) {
@@ -266,11 +282,162 @@ export default {
           this.nowCity = params.data.name;
         }
       });
-    }
+    },
 
-    // changeCity(params) {
-    //   console.log(params);
-    // }
+    // 职位薪资分布
+    initSalaryChart() {
+      var salaryChart = echarts.init(document.getElementById("work-salary"));
+
+      salaryChart.setOption({
+        textStyle: {
+          color: "#fff"
+        },
+        color: "#2f4554",
+        xAxis: {
+          type: "category",
+          data: ["10k", "15k", "20k", "25k", "30k", "以上"],
+          name: "薪资",
+          nameTextStyle: {
+            color: "#fff"
+          },
+          nameLocation: "middle"
+        },
+        yAxis: {
+          type: "value",
+          name: "职位数量",
+          nameTextStyle: {
+            color: "#fff"
+          }
+        },
+        series: [
+          {
+            data: [120, 200, 150, 80, 70, 110],
+            type: "bar"
+          }
+        ]
+      });
+    },
+
+    // 词云
+    initWordClound() {
+      var wordcloud = echarts.init(document.getElementById("work-wordcloud"));
+      wordcloud.setOption({
+        series: [
+          {
+            type: "wordCloud",
+            gridSize: 2,
+            sizeRange: [12, 50],
+            rotationRange: [-90, 90],
+            shape: "pentagon",
+            textStyle: {
+              normal: {
+                color: function() {
+                  return (
+                    "rgb(" +
+                    [
+                      Math.round(Math.random() * 255),
+                      Math.round(Math.random() * 255),
+                      Math.round(Math.random() * 255)
+                    ].join(",") +
+                    ")"
+                  );
+                }
+              },
+              emphasis: {
+                shadowBlur: 10,
+                shadowColor: "#333"
+              }
+            },
+            data: [
+              {
+                name: "Sam S Club",
+                value: 10000
+              },
+              {
+                name: "Macys",
+                value: 6181
+              },
+              {
+                name: "Amy Schumer",
+                value: 4386
+              },
+              {
+                name: "Jurassic World",
+                value: 4055
+              },
+              {
+                name: "Charter Communications",
+                value: 2467
+              },
+              {
+                name: "Chick Fil A",
+                value: 2244
+              },
+              {
+                name: "Planet Fitness",
+                value: 1898
+              },
+              {
+                name: "Pitch Perfect",
+                value: 1484
+              },
+              {
+                name: "Express",
+                value: 1112
+              },
+              {
+                name: "Home",
+                value: 965
+              },
+              {
+                name: "Johnny Depp",
+                value: 847
+              },
+              {
+                name: "Lena Dunham",
+                value: 582
+              },
+              {
+                name: "Lewis Hamilton",
+                value: 555
+              },
+              {
+                name: "KXAN",
+                value: 550
+              },
+              {
+                name: "Mary Ellen Mark",
+                value: 462
+              },
+              {
+                name: "Farrah Abraham",
+                value: 366
+              },
+              {
+                name: "Rita Ora",
+                value: 360
+              },
+              {
+                name: "Serena Williams",
+                value: 282
+              },
+              {
+                name: "NCAA baseball tournament",
+                value: 273
+              },
+              {
+                name: "Point",
+                value: 273
+              },
+              {
+                name: "Point Break",
+                value: 265
+              }
+            ]
+          }
+        ]
+      });
+    }
   },
   created() {
     this.username = util.storage("user");
@@ -281,6 +448,8 @@ export default {
   mounted() {
     this.initWorkSum();
     this.initWorkMap();
+    this.initSalaryChart();
+    this.initWordClound();
   }
 };
 </script>
@@ -332,7 +501,11 @@ export default {
 }
 .data-center .block-5 {
   width: 100%;
-  height: 100%;
+  height: 49%;
+}
+.data-center .block-6 {
+  width: 100%;
+  height: 50%;
 }
 .block-1-content h1.date {
   font-size: 30px;
@@ -361,7 +534,8 @@ export default {
   color: #fff;
 }
 .block-3 .chart-content,
-.block-4 .chart-content {
+.block-4 .chart-content,
+.chart-content {
   height: calc(100% - 34px);
 }
 </style>

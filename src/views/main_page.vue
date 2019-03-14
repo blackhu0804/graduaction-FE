@@ -47,7 +47,7 @@
             <div class="bd flex-1 block-2-content">
               <div class="now-city">
                 <span>当前城市：</span>
-                <p>北京</p>
+                <p>{{ nowCity }}</p>
               </div>
               <div class="work-sum">
                 <span>当前城市职位总数：</span>
@@ -108,11 +108,12 @@ import * as util from "../assets/utils.js";
 import echarts from "echarts";
 import "echarts/map/js/china.js";
 import location from "../assets/location.js";
-import { setInterval, setTimeout } from "timers";
+import { setInterval } from "timers";
 export default {
   data() {
     return {
       username: "",
+      nowCity: "北京",
       animation: true,
       time: new Date(),
       location: location.data
@@ -159,7 +160,7 @@ export default {
         }
         return res;
       };
-
+      let data = [{ name: "北京", value: 10 }, { name: "广州", value: 20 }];
       let option = {
         title: {
           text: "全国热门城市职位数量",
@@ -196,11 +197,11 @@ export default {
           zoom: 1.2,
           itemStyle: {
             normal: {
-              areaColor: "#323c48",
+              areaColor: "#235182",
               borderColor: "#111"
             },
             emphasis: {
-              areaColor: "#2a333d"
+              areaColor: "#1f4873"
             }
           }
         },
@@ -209,17 +210,18 @@ export default {
             name: "pm2.5",
             type: "scatter",
             coordinateSystem: "geo",
-            data: convertData([
-              { name: "北京", value: 10 },
-              { name: "广州", value: 20 }
-            ]),
-            symbolSize: 12,
+            data: convertData(data),
+            symbolSize: function(val) {
+              return val[2];
+            },
             label: {
               normal: {
-                show: false
+                formatter: "{b}",
+                position: "right",
+                show: true
               },
               emphasis: {
-                show: false
+                show: true
               }
             },
             itemStyle: {
@@ -228,12 +230,47 @@ export default {
                 borderWidth: 1
               }
             }
+          },
+          {
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            data: convertData(
+              data.sort(function(a, b) {
+                return b.value - a.value;
+              })
+            ),
+            symbolSize: function(val) {
+              return val[2];
+            },
+            showEffectOn: "render",
+            rippleEffect: {
+              brushType: "stroke"
+            },
+            hoverAnimation: true,
+            itemStyle: {
+              normal: {
+                color: "#f4e925",
+                shadowBlur: 10,
+                shadowColor: "#333"
+              }
+            },
+            zlevel: 1
           }
         ]
       };
       var chartMap = echarts.init(document.getElementById("work-map"));
       chartMap.setOption(option);
+
+      chartMap.on("click", params => {
+        if (params.data.name) {
+          this.nowCity = params.data.name;
+        }
+      });
     }
+
+    // changeCity(params) {
+    //   console.log(params);
+    // }
   },
   created() {
     this.username = util.storage("user");

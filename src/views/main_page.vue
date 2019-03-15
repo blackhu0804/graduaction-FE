@@ -51,7 +51,7 @@
               </div>
               <div class="work-sum">
                 <span>当前城市职位总数：</span>
-                <p>12312313</p>
+                <p>{{ nowCityWorkCount }}</p>
               </div>
             </div>
           </div>
@@ -134,14 +134,17 @@ import "echarts/map/js/china.js";
 import location from "../assets/location.js";
 import { setInterval } from "timers";
 require("echarts-wordcloud");
+import * as getCityData from "../api/data.js";
 export default {
   data() {
     return {
       username: "",
       nowCity: "北京",
+      nowCityWorkCount: "",
       animation: true,
       time: new Date(),
-      location: location.data
+      location: location.data,
+      pieData: []
     };
   },
   methods: {
@@ -158,13 +161,7 @@ export default {
             type: "pie",
             radius: "80%",
             center: ["50%", "50%"],
-            data: [
-              { value: 335, name: "前端" },
-              { value: 310, name: "后端" },
-              { value: 234, name: "大数据" },
-              { value: 135, name: "算法" },
-              { value: 1548, name: "运维" }
-            ]
+            data: this.pieData
           }
         ]
       });
@@ -290,6 +287,7 @@ export default {
       chartMap.on("click", params => {
         if (params.data.name) {
           this.nowCity = params.data.name;
+          this.getCityWorkCount();
         }
       });
     },
@@ -447,6 +445,14 @@ export default {
           }
         ]
       });
+    },
+
+    getCityWorkCount() {
+      getCityData.getCityWorkCount({ city: this.nowCity }).then(res => {
+        this.nowCityWorkCount = res.data.data.workCount;
+        this.pieData = res.data.data.classify;
+        this.initWorkSum();
+      });
     }
   },
   created() {
@@ -454,9 +460,10 @@ export default {
     setInterval(() => {
       this.time = new Date();
     }, 1000);
+
+    this.getCityWorkCount();
   },
   mounted() {
-    this.initWorkSum();
     this.initWorkMap();
     this.initSalaryChart();
     this.initWordClound();

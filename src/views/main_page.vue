@@ -93,8 +93,18 @@
             }"
           >
             <div class="corner"></div>
-            <div class="hd fix">
+            <div class="hd fix city-salary">
               <h2 class="title l">当前城市职位薪资分布</h2>
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  选择职位<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>前端</el-dropdown-item>
+                  <el-dropdown-item>后端</el-dropdown-item>
+                  <el-dropdown-item>客户端</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
             <div id="work-salary" class="bd flex-1 chart-content"></div>
           </div>
@@ -292,7 +302,7 @@ export default {
         textStyle: {
           color: "#fff"
         },
-        color: "#2f4554",
+        color: "#61a0a8",
         xAxis: {
           type: "category",
           data: ["10k", "15k", "20k", "25k", "30k", "以上"],
@@ -537,5 +547,19 @@ export default {
 .block-4 .chart-content,
 .chart-content {
   height: calc(100% - 34px);
+}
+.city-salary .el-dropdown {
+  float: right;
+  padding-right: 10px;
+  color: #5abaff;
+}
+.el-dropdown-menu {
+  border: #499cd7 1px solid;
+  -webkit-box-shadow: #0b2545 0px 0px 20px 8px inset;
+  box-shadow: #0b2545 0px 0px 20px 8px inset;
+  background: rgba(1, 15, 45, 0.9);
+}
+.el-dropdown-menu li {
+  color: #fff;
 }
 </style>

@@ -144,7 +144,8 @@ export default {
       animation: true,
       time: new Date(),
       location: location.data,
-      pieData: []
+      pieData: [],
+      cityWorkCount: []
     };
   },
   methods: {
@@ -173,17 +174,17 @@ export default {
       var convertData = function(data) {
         var res = [];
         for (var i = 0; i < data.length; i++) {
-          var geoCoord = geoCoordMap[data[i].name];
+          var geoCoord = geoCoordMap[data[i]._id];
           if (geoCoord) {
             res.push({
-              name: data[i].name,
-              value: geoCoord.concat(data[i].value)
+              name: data[i]._id,
+              value: geoCoord.concat(data[i].count)
             });
           }
         }
         return res;
       };
-      let data = [{ name: "北京", value: 10 }, { name: "广州", value: 20 }];
+      let data = this.cityWorkCount;
       let option = {
         title: {
           text: "全国热门城市职位数量",
@@ -196,12 +197,12 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: function(params) {
-            return params.name + " : " + params.value[2];
+            return params.data.name + " : " + params.data.value[2];
           }
         },
         visualMap: {
           min: 0,
-          max: 20,
+          max: 600,
           calculable: true,
           inRange: {
             color: ["#50a3ba", "#eac736", "#d94e5d"]
@@ -235,7 +236,7 @@ export default {
             coordinateSystem: "geo",
             data: convertData(data),
             symbolSize: function(val) {
-              return val[2];
+              return val[2] / 30;
             },
             label: {
               normal: {
@@ -263,7 +264,7 @@ export default {
               })
             ),
             symbolSize: function(val) {
-              return val[2];
+              return val[2] / 30;
             },
             showEffectOn: "render",
             rippleEffect: {
@@ -453,6 +454,13 @@ export default {
         this.pieData = res.data.data.classify;
         this.initWorkSum();
       });
+    },
+
+    getMapCityWorkCount() {
+      getCityData.getMapWorkCount().then(res => {
+        this.cityWorkCount = res.data.data.result;
+        this.initWorkMap();
+      });
     }
   },
   created() {
@@ -462,9 +470,9 @@ export default {
     }, 1000);
 
     this.getCityWorkCount();
+    this.getMapCityWorkCount();
   },
   mounted() {
-    this.initWorkMap();
     this.initSalaryChart();
     this.initWordClound();
   }

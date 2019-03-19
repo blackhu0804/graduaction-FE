@@ -95,16 +95,6 @@
             <div class="corner"></div>
             <div class="hd fix city-salary">
               <h2 class="title l">当前城市公司情况分布</h2>
-              <!-- <el-dropdown>
-                <span class="el-dropdown-link">
-                  切换城市<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>北京</el-dropdown-item>
-                  <el-dropdown-item>广州</el-dropdown-item>
-                  <el-dropdown-item>深圳</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown> -->
             </div>
             <div id="company-info" class="bd flex-1 chart-content"></div>
           </div>
@@ -116,8 +106,17 @@
             }"
           >
             <div class="corner"></div>
-            <div class="hd fix">
-              <h2 class="title l">职位词云</h2>
+            <div class="hd fix down-menu">
+              <h2 class="title l">学历及工作年限分布</h2>
+              <el-select v-model="selectName" placeholder="请选择" size="mini">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
             </div>
             <div id="work-wordcloud" class="bd flex-1 chart-content"></div>
           </div>
@@ -133,7 +132,6 @@ import echarts from "echarts";
 import "echarts/map/js/china.js";
 import location from "../assets/location.js";
 import { setInterval } from "timers";
-require("echarts-wordcloud");
 import * as getCityData from "../api/data.js";
 export default {
   data() {
@@ -147,10 +145,24 @@ export default {
       pieData: [],
       cityWorkCount: [],
       companyStatus: [],
-      companyStatusCount: []
+      companyStatusCount: [],
+      options: [
+        {
+          value: "1",
+          label: "工作经验"
+        },
+        {
+          value: "2",
+          label: "学历要求"
+        }
+      ],
+      selectName: "1"
     };
   },
   methods: {
+    handleCommand(name) {
+      this.dropDownName = name;
+    },
     // 当前城市职位分析
     initWorkSum() {
       var myChart = echarts.init(document.getElementById("work-sum"));
@@ -307,17 +319,7 @@ export default {
         color: "#61a0a8",
         xAxis: {
           type: "category",
-          // data: [
-          //   "未融资",
-          //   "天使轮",
-          //   "A轮",
-          //   "B轮",
-          //   "C轮",
-          //   "D轮及以上",
-          //   "已上市"
-          // ],
           data: this.companyStatus,
-          // name: "公司融资情况",
           nameTextStyle: {
             color: "#fff"
           },
@@ -325,7 +327,6 @@ export default {
             interval: 0,
             rotate: 40
           }
-          // nameLocation: "middle"
         },
         yAxis: {
           type: "value",
@@ -336,7 +337,6 @@ export default {
         },
         series: [
           {
-            // data: [120, 200, 150, 80, 70, 110, 10],
             data: this.companyStatusCount,
             type: "bar"
           }
@@ -344,122 +344,38 @@ export default {
       });
     },
 
-    // 词云
+    // 工作经验和学历要求分析
     initWordClound() {
       var wordcloud = echarts.init(document.getElementById("work-wordcloud"));
       wordcloud.setOption({
+        tooltip: {
+          trigger: "item",
+          formatter: "{b} : {c} ({d}%)"
+        },
+        legend: {
+          orient: "vertical",
+          left: "left",
+          data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+        },
         series: [
           {
-            type: "wordCloud",
-            gridSize: 2,
-            sizeRange: [12, 50],
-            rotationRange: [-90, 90],
-            shape: "pentagon",
-            textStyle: {
-              normal: {
-                color: function() {
-                  return (
-                    "rgb(" +
-                    [
-                      Math.round(Math.random() * 255),
-                      Math.round(Math.random() * 255),
-                      Math.round(Math.random() * 255)
-                    ].join(",") +
-                    ")"
-                  );
-                }
-              },
+            type: "pie",
+            radius: "55%",
+            center: ["50%", "60%"],
+            data: [
+              { value: 335, name: "直接访问" },
+              { value: 310, name: "邮件营销" },
+              { value: 234, name: "联盟广告" },
+              { value: 135, name: "视频广告" },
+              { value: 1548, name: "搜索引擎" }
+            ],
+            itemStyle: {
               emphasis: {
                 shadowBlur: 10,
-                shadowColor: "#333"
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
               }
-            },
-            data: [
-              {
-                name: "Sam S Club",
-                value: 10000
-              },
-              {
-                name: "Macys",
-                value: 6181
-              },
-              {
-                name: "Amy Schumer",
-                value: 4386
-              },
-              {
-                name: "Jurassic World",
-                value: 4055
-              },
-              {
-                name: "Charter Communications",
-                value: 2467
-              },
-              {
-                name: "Chick Fil A",
-                value: 2244
-              },
-              {
-                name: "Planet Fitness",
-                value: 1898
-              },
-              {
-                name: "Pitch Perfect",
-                value: 1484
-              },
-              {
-                name: "Express",
-                value: 1112
-              },
-              {
-                name: "Home",
-                value: 965
-              },
-              {
-                name: "Johnny Depp",
-                value: 847
-              },
-              {
-                name: "Lena Dunham",
-                value: 582
-              },
-              {
-                name: "Lewis Hamilton",
-                value: 555
-              },
-              {
-                name: "KXAN",
-                value: 550
-              },
-              {
-                name: "Mary Ellen Mark",
-                value: 462
-              },
-              {
-                name: "Farrah Abraham",
-                value: 366
-              },
-              {
-                name: "Rita Ora",
-                value: 360
-              },
-              {
-                name: "Serena Williams",
-                value: 282
-              },
-              {
-                name: "NCAA baseball tournament",
-                value: 273
-              },
-              {
-                name: "Point",
-                value: 273
-              },
-              {
-                name: "Point Break",
-                value: 265
-              }
-            ]
+            }
           }
         ]
       });
@@ -593,18 +509,20 @@ export default {
 .chart-content {
   height: calc(100% - 34px);
 }
-.city-salary .el-dropdown {
+.down-menu .el-select {
   float: right;
   padding-right: 10px;
   color: #5abaff;
+  width: 31%;
 }
-.el-dropdown-menu {
+.down-menu .el-select .el-input input {
   border: #499cd7 1px solid;
   -webkit-box-shadow: #0b2545 0px 0px 20px 8px inset;
   box-shadow: #0b2545 0px 0px 20px 8px inset;
   background: rgba(1, 15, 45, 0.9);
+  color: #ccc;
 }
-.el-dropdown-menu li {
-  color: #fff;
+.down-menu .el-select:hover .el-input__inner {
+  border-color: #409eff;
 }
 </style>

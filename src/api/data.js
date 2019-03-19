@@ -7,3 +7,7 @@ export const getCityWorkCount = params => {
 export const getMapWorkCount = params => {
   return instance.post("/mapData", params);
 };
+
+export const getCompanyCount = params => {
+  return instance.post("/conpanyData", params);
+};

@@ -94,19 +94,19 @@
           >
             <div class="corner"></div>
             <div class="hd fix city-salary">
-              <h2 class="title l">当前城市职位薪资分布</h2>
-              <el-dropdown>
+              <h2 class="title l">当前城市公司情况分布</h2>
+              <!-- <el-dropdown>
                 <span class="el-dropdown-link">
-                  选择职位<i class="el-icon-arrow-down el-icon--right"></i>
+                  切换城市<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>前端</el-dropdown-item>
-                  <el-dropdown-item>后端</el-dropdown-item>
-                  <el-dropdown-item>客户端</el-dropdown-item>
+                  <el-dropdown-item>北京</el-dropdown-item>
+                  <el-dropdown-item>广州</el-dropdown-item>
+                  <el-dropdown-item>深圳</el-dropdown-item>
                 </el-dropdown-menu>
-              </el-dropdown>
+              </el-dropdown> -->
             </div>
-            <div id="work-salary" class="bd flex-1 chart-content"></div>
+            <div id="company-info" class="bd flex-1 chart-content"></div>
           </div>
           <div
             class="comBox block block-6"
@@ -145,7 +145,9 @@ export default {
       time: new Date(),
       location: location.data,
       pieData: [],
-      cityWorkCount: []
+      cityWorkCount: [],
+      companyStatus: [],
+      companyStatusCount: []
     };
   },
   methods: {
@@ -187,11 +189,11 @@ export default {
       let data = this.cityWorkCount;
       let option = {
         title: {
-          text: "全国热门城市职位数量",
+          text: "全国热门城市职位数量分布",
           subtext: "data from Boss直聘",
           x: "center",
           textStyle: {
-            color: "#fff"
+            color: "#ccc"
           }
         },
         tooltip: {
@@ -289,13 +291,14 @@ export default {
         if (params.data.name) {
           this.nowCity = params.data.name;
           this.getCityWorkCount();
+          this.getCompanyCount();
         }
       });
     },
 
-    // 职位薪资分布
-    initSalaryChart() {
-      var salaryChart = echarts.init(document.getElementById("work-salary"));
+    // 城市公司情况分布
+    initCompanyCount() {
+      var salaryChart = echarts.init(document.getElementById("company-info"));
 
       salaryChart.setOption({
         textStyle: {
@@ -304,23 +307,37 @@ export default {
         color: "#61a0a8",
         xAxis: {
           type: "category",
-          data: ["10k", "15k", "20k", "25k", "30k", "以上"],
-          name: "薪资",
+          // data: [
+          //   "未融资",
+          //   "天使轮",
+          //   "A轮",
+          //   "B轮",
+          //   "C轮",
+          //   "D轮及以上",
+          //   "已上市"
+          // ],
+          data: this.companyStatus,
+          // name: "公司融资情况",
           nameTextStyle: {
             color: "#fff"
           },
-          nameLocation: "middle"
+          axisLabel: {
+            interval: 0,
+            rotate: 40
+          }
+          // nameLocation: "middle"
         },
         yAxis: {
           type: "value",
-          name: "职位数量",
+          name: "公司数量",
           nameTextStyle: {
             color: "#fff"
           }
         },
         series: [
           {
-            data: [120, 200, 150, 80, 70, 110],
+            // data: [120, 200, 150, 80, 70, 110, 10],
+            data: this.companyStatusCount,
             type: "bar"
           }
         ]
@@ -461,6 +478,19 @@ export default {
         this.cityWorkCount = res.data.data.result;
         this.initWorkMap();
       });
+    },
+
+    getCompanyCount() {
+      this.companyStatus = [];
+      this.companyStatusCount = [];
+      getCityData.getCompanyCount({ city: this.nowCity }).then(res => {
+        let data = res.data.data.sortRet;
+        data.forEach(item => {
+          this.companyStatus.push(item._id);
+          this.companyStatusCount.push(item.count);
+        });
+        this.initCompanyCount();
+      });
     }
   },
   created() {
@@ -471,9 +501,9 @@ export default {
 
     this.getCityWorkCount();
     this.getMapCityWorkCount();
+    this.getCompanyCount();
   },
   mounted() {
-    this.initSalaryChart();
     this.initWordClound();
   }
 };

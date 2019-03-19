@@ -108,7 +108,11 @@
             <div class="corner"></div>
             <div class="hd fix down-menu">
               <h2 class="title l">学历及工作年限分布</h2>
-              <el-select v-model="selectName" placeholder="请选择" size="mini">
+              <el-select
+                v-model="selectName"
+                size="mini"
+                @change="this.getEduOrExpCount"
+              >
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -148,21 +152,20 @@ export default {
       companyStatusCount: [],
       options: [
         {
-          value: "1",
+          value: 1,
           label: "工作经验"
         },
         {
-          value: "2",
+          value: 2,
           label: "学历要求"
         }
       ],
-      selectName: "1"
+      selectName: 1,
+      eduOrExpData: [],
+      eduOrExpValue: []
     };
   },
   methods: {
-    handleCommand(name) {
-      this.dropDownName = name;
-    },
     // 当前城市职位分析
     initWorkSum() {
       var myChart = echarts.init(document.getElementById("work-sum"));
@@ -304,6 +307,7 @@ export default {
           this.nowCity = params.data.name;
           this.getCityWorkCount();
           this.getCompanyCount();
+          this.getEduOrExpCount();
         }
       });
     },
@@ -345,7 +349,7 @@ export default {
     },
 
     // 工作经验和学历要求分析
-    initWordClound() {
+    initEduOrExpCount() {
       var wordcloud = echarts.init(document.getElementById("work-wordcloud"));
       wordcloud.setOption({
         tooltip: {
@@ -353,22 +357,19 @@ export default {
           formatter: "{b} : {c} ({d}%)"
         },
         legend: {
-          orient: "vertical",
+          // orient: "vertical",
           left: "left",
-          data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+          data: this.eduOrExpData,
+          textStyle: {
+            color: "#fff"
+          }
         },
         series: [
           {
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],
-            data: [
-              { value: 335, name: "直接访问" },
-              { value: 310, name: "邮件营销" },
-              { value: 234, name: "联盟广告" },
-              { value: 135, name: "视频广告" },
-              { value: 1548, name: "搜索引擎" }
-            ],
+            data: this.eduOrExpValue,
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,
@@ -407,6 +408,30 @@ export default {
         });
         this.initCompanyCount();
       });
+    },
+
+    getEduOrExpCount() {
+      this.eduOrExpData = [];
+      this.eduOrExpValue = [];
+      if (this.selectName === 1) {
+        getCityData.getEduData({ city: this.nowCity }).then(res => {
+          let result = res.data.data.result;
+          result.forEach(item => {
+            this.eduOrExpData.push(item._id);
+            this.eduOrExpValue.push({ name: item._id, value: item.count });
+          });
+          this.initEduOrExpCount();
+        });
+      } else if (this.selectName === 2) {
+        getCityData.getExpData({ city: this.nowCity }).then(res => {
+          let result = res.data.data.result;
+          result.forEach(item => {
+            this.eduOrExpData.push(item._id);
+            this.eduOrExpValue.push({ name: item._id, value: item.count });
+          });
+          this.initEduOrExpCount();
+        });
+      }
     }
   },
   created() {
@@ -418,9 +443,7 @@ export default {
     this.getCityWorkCount();
     this.getMapCityWorkCount();
     this.getCompanyCount();
-  },
-  mounted() {
-    this.initWordClound();
+    this.getEduOrExpCount();
   }
 };
 </script>

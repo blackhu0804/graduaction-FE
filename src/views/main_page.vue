@@ -1,14 +1,43 @@
 <template>
   <div class="main-page">
-    <!-- <h1>欢迎{{ username }}</h1> -->
     <header>
       <div class="flex-row content">
         <h1><i class="el-icon-bell"></i> 数据可视化展示平台</h1>
-        <p>{{ username }}</p>
+        <el-dropdown trigger="click" @command="navAction" class="navAction">
+          <span class="el-dropdown-link">
+            <p>{{ username }}</p>
+          </span>
+          <el-dropdown-menu slot="dropdown" class="nav">
+            <el-dropdown-item
+              title="首页"
+              :command="{
+                name: '首页',
+                nav: { name: '首页', link: '', type: 'isLink' }
+              }"
+              >首页</el-dropdown-item
+            >
+            <el-dropdown-item
+              title="数据管理"
+              :command="{
+                name: '数据管理',
+                nav: { name: '数据管理', link: '', type: 'isLink' }
+              }"
+              >数据管理</el-dropdown-item
+            >
+            <el-dropdown-item
+              title="退出"
+              :command="{
+                name: 'logout',
+                nav: { name: 'logout', link: '', type: 'isMethod' }
+              }"
+              >退出</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </header>
 
-    <div class="data-center">
+    <div class="data-center" v-if="$route.path === '/index'">
       <el-row :gutter="10" class="data-container">
         <el-col :span="6" class="el-col-block1">
           <div
@@ -127,6 +156,8 @@
         </el-col>
       </el-row>
     </div>
+
+    <router-view v-else />
   </div>
 </template>
 
@@ -165,7 +196,38 @@ export default {
       eduOrExpValue: []
     };
   },
+  watch: {
+    // 如果路由有变化，会再次执行该方法
+    $route: "fetchData"
+  },
   methods: {
+    navAction: function(command) {
+      let { name, nav } = command;
+      switch (nav.type) {
+        case "isLink":
+          this.$router.replace({ name: name });
+          console.log(name);
+          break;
+        case "isMethod":
+          if (name == "logout") {
+            this.logout();
+          }
+          break;
+        default:
+          this.$router.push({ name: name });
+      }
+    },
+    logout: function() {
+      this.$confirm("确定退出?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(() => {
+          this.$emit("logout");
+        })
+        .catch(() => {});
+    },
     // 当前城市职位分析
     initWorkSum() {
       var myChart = echarts.init(document.getElementById("work-sum"));
@@ -432,6 +494,13 @@ export default {
           this.initEduOrExpCount();
         });
       }
+    },
+
+    fetchData() {
+      this.getCityWorkCount();
+      this.getMapCityWorkCount();
+      this.getCompanyCount();
+      this.getEduOrExpCount();
     }
   },
   created() {
@@ -439,19 +508,15 @@ export default {
     setInterval(() => {
       this.time = new Date();
     }, 1000);
-
-    this.getCityWorkCount();
-    this.getMapCityWorkCount();
-    this.getCompanyCount();
-    this.getEduOrExpCount();
+    this.fetchData();
   }
 };
 </script>
 
 <style>
 .main-page header {
-  height: 70px;
-  line-height: 70px;
+  height: 50px;
+  line-height: 50px;
   overflow: hidden;
   color: #fff;
 }
@@ -464,7 +529,7 @@ export default {
   text-shadow: 0.1em 0.1em 0.05em #293944;
 }
 .data-center {
-  height: calc(100% - 70px);
+  height: calc(100% - 50px);
 }
 .data-center .data-container {
   height: 100%;
@@ -547,5 +612,70 @@ export default {
 }
 .down-menu .el-select:hover .el-input__inner {
   border-color: #409eff;
+}
+.navAction,
+.navAction > span {
+  display: block;
+  width: 54px;
+  height: 54px;
+  line-height: 54px;
+  text-align: center;
+  cursor: pointer;
+}
+.navAction {
+  position: absolute;
+  right: 24px;
+  top: 0;
+  z-index: 2;
+}
+.navAction .el-dropdown-link {
+  font-size: 16px;
+  color: #4a9cd8;
+  position: relative;
+  z-index: 2;
+  user-select: none;
+}
+.el-dropdown-menu.nav {
+  width: 120px;
+  border: #499cd7 1px solid;
+  box-shadow: #0b2545 0px 0px 20px 8px inset;
+  background: rgba(1, 15, 45, 0.9);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.el-dropdown-menu.nav .face {
+  color: #499cd7;
+  text-align: center;
+  margin: 0 6px;
+  border-bottom: #499cd7 1px solid;
+  padding: 7px 0 10px;
+  font-size: 14px;
+}
+.el-dropdown-menu.nav .face .ion {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  background-color: #499cd7;
+  color: #010e27;
+  border-radius: 50%;
+  font-size: 18px;
+  margin-right: 8px;
+}
+.el-dropdown-menu.nav .el-dropdown-menu__item {
+  color: #ffffff;
+  line-height: 24px;
+  padding: 4px 23px;
+}
+.el-dropdown-menu.nav .el-dropdown-menu__item:focus,
+.el-dropdown-menu.nav .el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: #113a5d;
+}
+.el-dropdown-menu.nav .popper__arrow {
+  top: -7px;
+}
+.el-dropdown-menu.nav .popper__arrow,
+.el-dropdown-menu.nav .popper__arrow::after {
+  border-bottom-color: #499cd7;
 }
 </style>

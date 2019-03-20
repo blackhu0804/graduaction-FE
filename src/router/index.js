@@ -29,7 +29,14 @@ export default new Router({
       name: "首页",
       component: resolve => {
         require(["../views/main_page.vue"], resolve);
-      }
+      },
+      children: [
+        {
+          path: "/datacenter",
+          name: "数据管理",
+          component: resolve => require(["../views/datacenter.vue"], resolve)
+        }
+      ]
     },
     {
       path: "/401",

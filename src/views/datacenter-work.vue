@@ -4,77 +4,80 @@
     <div class="hd">
       <div class="title">职位管理</div>
     </div>
-    <div class="bd flex-1 scrollbar">
-      <!-- 搜索 -->
+    <div class="bd flex-1 scrollbar data-mainContent">
       <el-form ref="form" :inline="true" :model="queryParam" size="mini">
         <el-form-item label="职位名称">
           <el-input v-model="queryParam.name"></el-input>
         </el-form-item>
         <el-form-item label="公司名称">
-          <el-input v-model="queryParam.name"></el-input>
+          <el-input v-model="queryParam.companyName"></el-input>
         </el-form-item>
         <el-form-item label="城市">
-          <el-select v-model="queryParam.street" @change="fetchCommunity">
+          <el-select v-model="queryParam.city">
             <el-option label="不限" value=""></el-option>
             <el-option
-              v-for="item in locationList"
+              v-for="item in cityList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
+              :value="item.name"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="工作经验">
-          <el-select v-model="queryParam.community">
+          <el-select v-model="queryParam.exp">
             <el-option label="不限" value=""></el-option>
             <el-option
               v-for="item in expList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
+              :value="item.name"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="学历">
-          <el-select v-model="queryParam.type">
+          <el-select v-model="queryParam.edu">
             <el-option label="不限" value=""></el-option>
             <el-option
               v-for="item in eduList"
               :key="item.id"
-              :label="item.label"
-              :value="item.value"
+              :label="item.name"
+              :value="item.name"
             ></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="fetchData(true)">查询</el-button>
+          <el-button type="primary" @click="getTableData">查询</el-button>
           <el-button @click="reset()">重置</el-button>
         </el-form-item>
       </el-form>
       <!-- list -->
       <el-table
         :data="list"
-        :height="$root.winHeight - 260"
         stripe
-        style="width: 100%"
+        style="width: 100%;height: 70%;overflow-y:auto;"
+        class="scrollbar"
       >
-        <el-table-column prop="name" label="职位" width="150" align="center">
+        <el-table-column
+          prop="jobTitle"
+          label="职位"
+          width="150"
+          align="center"
+        >
         </el-table-column>
-        <el-table-column prop="sex" label="公司" width="50" align="center">
+        <el-table-column
+          prop="companyName"
+          label="公司"
+          width="50"
+          align="center"
+        >
         </el-table-column>
-        <el-table-column prop="rs_districtcountry" label="薪资" width="200">
-        </el-table-column>
-        <el-table-column prop="rs_street" label="地点" width="200">
-        </el-table-column>
-        <el-table-column prop="rs_community" label="工作经验">
-        </el-table-column>
-        <el-table-column prop="card" label="学历要求" width="200">
-        </el-table-column>
-        <el-table-column prop="birthday" label="公司融资规模" width="200">
-        </el-table-column>
-        <el-table-column prop="civil_type" label="公司人数" width="100">
-        </el-table-column>
+        <el-table-column prop="salary" label="薪资"> </el-table-column>
+        <el-table-column prop="workLocation" label="地点"> </el-table-column>
+        <el-table-column prop="workYear" label="工作经验"> </el-table-column>
+        <el-table-column prop="academic" label="学历要求"> </el-table-column>
+        <el-table-column prop="finance" label="公司融资规模"> </el-table-column>
+        <el-table-column prop="peopleCount" label="公司人数"> </el-table-column>
       </el-table>
       <!-- 分页 -->
       <!-- <div class="page">
@@ -92,24 +95,69 @@
 </template>
 
 <script>
+import * as dataManage from "../api/datamanage.js";
 export default {
   data() {
     return {
       loading: false,
       list: [],
+      cityList: [],
+      expList: [
+        { id: 1, name: "经验不限" },
+        { id: 2, name: "应届生" },
+        { id: 3, name: "1年以内" },
+        { id: 4, name: "1-3年" },
+        { id: 5, name: "3-5年" },
+        { id: 6, name: "5-10年" }
+      ],
+      eduList: [
+        { id: 1, name: "学历不限" },
+        { id: 2, name: "大专" },
+        { id: 3, name: "本科" },
+        { id: 4, name: "硕士" },
+        { id: 5, name: "博士" }
+      ],
       queryParam: {
         p: 1,
-        pagesize: 15,
-        country: "",
-        street: "",
-        community: "",
-        type: "",
+        pageSize: 10,
         name: "",
-        starttime: "",
-        endtime: ""
+        companyName: "",
+        city: "",
+        exp: "",
+        edu: ""
       },
       totalRows: 0
     };
+  },
+  methods: {
+    getCityList() {
+      dataManage.getCityList().then(res => {
+        let result = res.data.data.result;
+        result.forEach(item => {
+          this.cityList.push({ id: item.code, name: item.name });
+        });
+      });
+    },
+    getTableData() {
+      dataManage.getWorkList(this.queryParam).then(res => {
+        console.log(res.data.data.result);
+        this.list = res.data.data.result;
+      });
+    },
+    reset: function() {
+      this.$refs.form && this.$refs.form.resetFields();
+      Object.assign(this.queryParam, {
+        name: "",
+        companyName: "",
+        city: "",
+        exp: "",
+        edu: ""
+      });
+    }
+  },
+  created() {
+    this.getCityList();
+    this.getTableData();
   }
 };
 </script>
@@ -118,6 +166,9 @@ export default {
 .bd {
   overflow-x: hidden;
   overflow-y: auto;
+}
+.data-mainContent {
+  height: calc(100% - 50px);
 }
 .el-form-item__label {
   color: #499cd7;

@@ -359,19 +359,16 @@ body {
 .comBox.noLight::before {
   display: none;
 }
-/* .comBox::after,
+.comBox::after,
 .comBox .hd .more > span::after {
   width: 24px;
   height: 24px;
   border-left: #1d446d 1px solid;
-  background-color: #00011d;
+  background-color: #000a22;
   transform: rotate(45deg);
   right: -13px;
   bottom: -13px;
 }
-.comBox:first::after .hd .more > span::after {
-  background-color: #fff;
-} */
 
 .comBox .corner::before,
 .comBox .corner::after {
@@ -484,4 +481,522 @@ body {
 .comBox.noBorder .corner,
 .comBox.noLight::before {
   display: none;
+}
+
+.comBox .corner::before,
+.comBox .corner::after {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: #499cd7 3px solid;
+  position: absolute;
+  z-index: 1;
+}
+
+.comBox .corner::before {
+  left: -2px;
+  bottom: -2px;
+  border-width: 0 0 3px 3px;
+}
+
+.comBox .corner::after {
+  right: -2px;
+  top: -2px;
+  border-width: 3px 3px 0 0;
+}
+
+.comBox .hd,
+.comBox .bd {
+  position: relative;
+  z-index: 3;
+}
+
+.comBox .hd {
+  height: auto;
+  line-height: 34px;
+}
+
+.comBox .hd .title {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5abaff;
+  padding-left: 11px;
+  position: relative;
+  z-index: 1;
+}
+.comBox .hd .title.fz16 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.comBox .hd .title::before {
+  content: "";
+  display: block;
+  width: 3px;
+  height: 17px;
+  background-color: #37a2da;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -8px;
+}
+
+.comBox .hd .more {
+  margin: 5px 5px 0 0;
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.comBox .hd .more > span {
+  display: inline-block;
+  box-shadow: #0b2545 0px 0px 8px 5px inset;
+  padding: 0 10px 0 12px;
+  line-height: 24px;
+}
+
+.comBox .hd .more > span::after {
+  width: 14px;
+  height: 14px;
+  right: -9px;
+  bottom: -9px;
+}
+.comBox .hd .yearPicker {
+  width: 80px;
+  margin-right: 5px;
+}
+.comBox .hd .yearPicker.areaYear {
+  width: 210px;
+  margin-top: 5px;
+}
+.comBox .hd .el-date-editor .el-range-separator {
+  color: #ffffff;
+}
+.comBox .hd .yearPicker.areaYear .el-range__close-icon {
+  display: none;
+}
+.comBox .hd .el-input__inner {
+  padding-right: 10px;
+}
+
+.comBox .bd {
+  margin: 0 8px;
+}
+
+.comBox.noBorder {
+  border: 0;
+  box-shadow: none;
+}
+
+.comBox.noBorder::before,
+.comBox.noBorder::after,
+.comBox.noBorder .corner,
+.comBox.noLight::before {
+  display: none;
+}
+
+.comBox .corner::before,
+.comBox .corner::after {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: #499cd7 3px solid;
+  position: absolute;
+  z-index: 1;
+}
+
+.comBox .corner::before {
+  left: -2px;
+  bottom: -2px;
+  border-width: 0 0 3px 3px;
+}
+
+.comBox .corner::after {
+  right: -2px;
+  top: -2px;
+  border-width: 3px 3px 0 0;
+}
+
+.comBox .hd,
+.comBox .bd {
+  position: relative;
+  z-index: 3;
+}
+
+.comBox .hd {
+  height: auto;
+  line-height: 34px;
+}
+
+.comBox .hd .title {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5abaff;
+  padding-left: 11px;
+  position: relative;
+  z-index: 1;
+}
+.comBox .hd .title.fz16 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.comBox .hd .title::before {
+  content: "";
+  display: block;
+  width: 3px;
+  height: 17px;
+  background-color: #37a2da;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -8px;
+}
+
+.comBox .hd .more {
+  margin: 5px 5px 0 0;
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.comBox .hd .more > span {
+  display: inline-block;
+  box-shadow: #0b2545 0px 0px 8px 5px inset;
+  padding: 0 10px 0 12px;
+  line-height: 24px;
+}
+
+.comBox .hd .more > span::after {
+  width: 14px;
+  height: 14px;
+  right: -9px;
+  bottom: -9px;
+}
+.comBox .hd .yearPicker {
+  width: 80px;
+  margin-right: 5px;
+}
+.comBox .hd .yearPicker.areaYear {
+  width: 210px;
+  margin-top: 5px;
+}
+.comBox .hd .el-date-editor .el-range-separator {
+  color: #ffffff;
+}
+.comBox .hd .yearPicker.areaYear .el-range__close-icon {
+  display: none;
+}
+.comBox .hd .el-input__inner {
+  padding-right: 10px;
+}
+
+.comBox .bd {
+  margin: 0 8px;
+}
+
+.comBox.noBorder {
+  border: 0;
+  box-shadow: none;
+}
+
+.comBox.noBorder::before,
+.comBox.noBorder::after,
+.comBox.noBorder .corner,
+.comBox.noLight::before {
+  display: none;
+}
+
+.chart-tabs {
+  float: right;
+}
+.chart-tabs .item {
+  display: inline-block;
+  padding: 0 1em;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 0.5em;
+}
+.chart-tabs .item.active {
+  background: #38a3db;
+}
+
+.channelChart {
+  height: 250px;
+}
+.channelChart .total {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  font-size: 24px;
+}
+
+/* loading背景透明 */
+.el-loading-mask {
+  background: transparent;
+}
+
+/* 动态桌面弹框 */
+.dynamic-dialog {
+  position: fixed;
+  overflow: hidden;
+}
+.dynamic-dialog .el-dialog {
+  background: #0f1e41;
+}
+.dynamic-dialog .el-dialog__title,
+.dynamic-dialog .el-dialog__body {
+  color: #fff;
+}
+.dynamic .__widget {
+  min-height: 280px;
+}
+
+.page {
+  text-align: center;
+  padding-top: 20px;
+}
+/* 全局 dialog */
+.el-dialog {
+  background: #010c26;
+  color: #fff;
+  box-shadow: 0 0 12px #3ca7dd inset;
+}
+.el-dialog .el-pagination .btn-next,
+.el-dialog .el-pagination .btn-prev {
+  background: transparent;
+}
+.el-dialog .el-dialog__title {
+  font-weight: 700;
+  color: #3f87bd;
+}
+
+/* 全局 table */
+.el-table::before {
+  display: none;
+}
+.el-table,
+.el-table__expanded-cell,
+.el-table th,
+.el-table tr {
+  background: transparent;
+}
+.el-table th > .cell {
+  color: #3f87bd;
+}
+.el-table {
+  color: #fff;
+}
+.el-table--striped .el-table__body tr.el-table__row--striped td,
+.el-table--enable-row-hover .el-table__body tr:hover > td,
+.el-table__header th {
+  background: #1b253c;
+}
+.el-table td,
+.el-table th.is-leaf {
+  border-bottom: 0;
+}
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+  background-color: #313c4b;
+}
+
+/* 全局notify */
+.el-notification {
+  border-radius: 2px;
+  border: #499cd7 1px solid;
+  box-shadow: #0b2545 0px 0px 20px 5px inset;
+  background: rgba(1, 12, 38, 0.9);
+  width: auto;
+  min-width: 90px;
+  padding: 4px 15px 20px 15px;
+}
+.el-notification__content,
+.el-notification__title {
+  color: #ffffff;
+}
+.el-notification__closeBtn {
+  border: #499cd7 1px solid;
+  color: #499cd7;
+  right: 4px;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  font-size: 21px;
+}
+.el-notification__closeBtn:hover {
+  background-color: #499cd7;
+  color: #ffffff;
+}
+.el-notification__group {
+  margin-left: 0;
+}
+.el-notification__title {
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  color: #5abaff;
+  font-size: 14px;
+  font-weight: normal;
+}
+.el-notification.left {
+  left: 8px;
+  margin-bottom: -6px;
+}
+.el-notification.right {
+  right: 8px;
+  margin-bottom: -6px;
+}
+
+.comSelect .el-input__inner {
+  background-color: #03122a;
+  border-color: #2c6390;
+  padding: 5px 22px 5px 12px;
+  font-size: 12px;
+  line-height: 1.2;
+  border-radius: 2px;
+  height: 30px;
+}
+.comSelect .el-input__icon {
+  line-height: 25px;
+}
+.comSelect .el-input .el-input__icon,
+.comSelect .el-input__inner,
+.comSelect .el-input__inner::-webkit-input-placeholder {
+  color: #ffffff;
+}
+.comSelect:hover .el-input__inner {
+  border-color: #2c6390;
+}
+.comSelect .el-input.is-disabled .el-input__inner {
+  height: 30px !important;
+  background-color: #03122a;
+  border-color: #2c6390;
+}
+.comSelect .el-input.is-disabled .el-input__inner:hover {
+  border-color: #2c6390;
+}
+
+.comSelectDropdown {
+  border: #499cd7 1px solid;
+  box-shadow: #0b2545 0px 0px 20px 8px inset;
+  background: rgba(2, 14, 38, 0.8);
+}
+.comSelectDropdown .el-select-dropdown__item {
+  color: #ffffff;
+  line-height: 24px;
+  padding: 4px 23px;
+  font-size: 12px;
+}
+.comSelectDropdown .el-select-dropdown__item:hover,
+.comSelectDropdown .el-select-dropdown__item.selected {
+  background-color: #113a5d !important;
+}
+.comSelectDropdown .el-select-dropdown__item.hover {
+  background-color: transparent;
+}
+.comSelectDropdown.el-popper .popper__arrow {
+  top: -7px;
+}
+.comSelectDropdown.el-popper .popper__arrow,
+.comSelectDropdown.el-popper .popper__arrow::after {
+  border-bottom-color: #499cd7;
+}
+
+.el-progress-bar__outer,
+.el-progress-bar__inner {
+  border-radius: 0;
+}
+.el-progress-bar__outer {
+  background-color: #122d49;
+  overflow: visible;
+}
+.el-progress--text-inside .el-progress-bar__innerText {
+  position: absolute;
+  left: 100%;
+  top: 0;
+}
+
+/* 分页 */
+.el-pager li,
+.el-pagination .btn-next,
+.el-pagination .btn-prev {
+  background: transparent;
+  border: 1px solid #499cd7;
+  color: #fff;
+  box-shadow: 0 0 32px #3ca7dd inset;
+  margin: 0 4px;
+}
+.el-pager li.active {
+  background: #3ca7dd;
+  color: #fff;
+}
+.el-pager li.btn-quicknext,
+.el-pager li.btn-quickprev {
+  color: #fff;
+}
+
+/* 全局form */
+.el-form-item__label {
+  color: #499cd7;
+}
+.el-form-item__label {
+  color: #fff;
+}
+.el-input__inner {
+  background: #001224;
+  color: #fff;
+  border-color: #274f6c;
+}
+.el-input__inner input {
+  background: transparent;
+}
+.el-date-editor .el-range-input {
+  color: #fff;
+}
+.el-form .el-button--default {
+  border-color: #37a2da;
+  box-shadow: #0b2545 0px 0px 8px 5px inset;
+  background: transparent;
+  color: #fff;
+}
+.el-form .el-button--default:hover {
+  background: transparent;
+}
+/* 信息表格 */
+
+.line-table .label {
+  text-align: right;
+  height: 3em;
+  padding: 8px;
+  border: 1px solid #2f6899;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.line-table .cont {
+  text-align: left;
+  height: 3em;
+  padding: 8px;
+  border: 1px solid #2f6899;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 小屏兼容 */
+/* .flex-col .comBox.flex-1{flex:200px 1 0;} */
+
+.el-table td,
+.el-table th {
+  vertical-align: top;
+}
+.el-table th > .cell {
+  text-align: center;
+}
+.el-table .cell {
+  text-align: center;
 }

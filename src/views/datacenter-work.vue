@@ -47,7 +47,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="getTableData">查询</el-button>
+          <el-button type="primary" @click="getTableData(true)">查询</el-button>
           <el-button @click="reset()">重置</el-button>
         </el-form-item>
       </el-form>
@@ -58,38 +58,32 @@
         style="width: 100%;height: 70%;overflow-y:auto;"
         class="scrollbar"
       >
-        <el-table-column
-          prop="jobTitle"
-          label="职位"
-          width="150"
-          align="center"
-        >
+        <el-table-column prop="jobTitle" label="职位" align="center">
         </el-table-column>
-        <el-table-column
-          prop="companyName"
-          label="公司"
-          width="50"
-          align="center"
-        >
+        <el-table-column prop="companyName" label="公司" align="center">
         </el-table-column>
-        <el-table-column prop="salary" label="薪资"> </el-table-column>
-        <el-table-column prop="workLocation" label="地点"> </el-table-column>
-        <el-table-column prop="workYear" label="工作经验"> </el-table-column>
-        <el-table-column prop="academic" label="学历要求"> </el-table-column>
+        <el-table-column prop="salary" label="薪资" width="100px">
+        </el-table-column>
+        <el-table-column prop="workLocation" label="地点" width="100px;">
+        </el-table-column>
+        <el-table-column prop="workYear" label="工作经验" width="100px;">
+        </el-table-column>
+        <el-table-column prop="academic" label="学历要求" width="100px;">
+        </el-table-column>
         <el-table-column prop="finance" label="公司融资规模"> </el-table-column>
         <el-table-column prop="peopleCount" label="公司人数"> </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <!-- <div class="page">
+      <div class="page">
         <el-pagination
           @current-change="handleCurrentChange"
-          :page-size="queryParam.pagesize"
+          :page-size="queryParam.pageSize"
           :current-page="queryParam.p"
           layout="prev, pager, next"
           :total="totalRows"
         >
         </el-pagination>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -138,10 +132,13 @@ export default {
         });
       });
     },
-    getTableData() {
+    getTableData(isReload) {
+      if (isReload) {
+        this.queryParam.p = 1;
+      }
       dataManage.getWorkList(this.queryParam).then(res => {
-        console.log(res.data.data.result);
         this.list = res.data.data.result;
+        this.totalRows = res.data.totalRows;
       });
     },
     reset: function() {
@@ -153,6 +150,10 @@ export default {
         exp: "",
         edu: ""
       });
+    },
+    handleCurrentChange(value) {
+      this.queryParam.p = value;
+      this.getTableData();
     }
   },
   created() {
@@ -168,7 +169,7 @@ export default {
   overflow-y: auto;
 }
 .data-mainContent {
-  height: calc(100% - 50px);
+  height: 100%;
 }
 .el-form-item__label {
   color: #499cd7;
@@ -222,5 +223,22 @@ export default {
 }
 .el-table--enable-row-hover .el-table__body tr:hover > td {
   background-color: #313c4b;
+}
+.el-pager li,
+.el-pagination .btn-next,
+.el-pagination .btn-prev {
+  background: transparent;
+  border: 1px solid #499cd7;
+  color: #fff;
+  box-shadow: 0 0 32px #3ca7dd inset;
+  margin: 0 4px;
+}
+.el-pager li.active {
+  background: #3ca7dd;
+  color: #fff;
+}
+.el-pager li.btn-quicknext,
+.el-pager li.btn-quickprev {
+  color: #fff;
 }
 </style>

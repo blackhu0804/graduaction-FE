@@ -256,6 +256,7 @@ export default {
   border-radius: 6px;
   background-color: #f48b25;
   border: rgb(245, 120, 3);
+  box-shadow: none;
 }
 .login-forget .get-code.is-disabled {
   background-color: #eee;

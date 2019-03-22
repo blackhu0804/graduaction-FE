@@ -963,9 +963,9 @@ body {
   background: transparent;
   color: #fff;
 }
-.el-form .el-button--default:hover {
+/* .el-form .el-button--default:hover {
   background: transparent;
-}
+} */
 /* 信息表格 */
 
 .line-table .label {

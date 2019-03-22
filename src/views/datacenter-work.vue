@@ -72,6 +72,13 @@
         </el-table-column>
         <el-table-column prop="finance" label="公司融资规模"> </el-table-column>
         <el-table-column prop="peopleCount" label="公司人数"> </el-table-column>
+        <el-table-column prop="href" label="操作" width="100" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" @click="jumpDetail(scope.row.href)"
+              >详情</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页 -->
       <div class="page">
@@ -90,6 +97,7 @@
 
 <script>
 import * as dataManage from "../api/datamanage.js";
+import { log } from "util";
 export default {
   data() {
     return {
@@ -124,6 +132,9 @@ export default {
     };
   },
   methods: {
+    jumpDetail(href) {
+      window.open(href);
+    },
     getCityList() {
       dataManage.getCityList().then(res => {
         let result = res.data.data.result;
@@ -163,7 +174,7 @@ export default {
 };
 </script>
 
-<style>
+<style  >
 .bd {
   overflow-x: hidden;
   overflow-y: auto;

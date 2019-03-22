@@ -7,3 +7,11 @@ export const getCityList = params => {
 export const getWorkList = params => {
   return instance.post("/getWorkList", params);
 };
+
+export const getUserList = params => {
+  return instance.post("/getUserList", params);
+};
+
+export const getProxyList = params => {
+  return instance.post("/getProxyList", params);
+};

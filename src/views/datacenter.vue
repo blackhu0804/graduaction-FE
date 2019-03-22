@@ -26,7 +26,7 @@
 export default {
   components: {
     list1: resolve => require(["./datacenter-work"], resolve),
-    list2: resolve => require(["./datacenter-city"], resolve),
+    // list2: resolve => require(["./datacenter-city"], resolve),
     list3: resolve => require(["./datacenter-proxy"], resolve),
     list4: resolve => require(["./datacenter-user"], resolve)
   },
@@ -37,10 +37,10 @@ export default {
           name: "职位管理",
           cid: 1
         },
-        {
-          name: "城市管理",
-          cid: 2
-        },
+        // {
+        //   name: "城市管理",
+        //   cid: 2
+        // },
         {
           name: "代理IP管理",
           cid: 3

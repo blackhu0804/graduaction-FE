@@ -110,7 +110,11 @@
             <div class="hd fix">
               <h2 class="title l">全国热门城市职位分布</h2>
             </div>
-            <div id="work-map" class="bd flex-1 chart-content"></div>
+            <div
+              v-if="pieData"
+              id="work-map"
+              class="bd flex-1 chart-content"
+            ></div>
           </div>
         </el-col>
         <el-col :span="6" class="el-col-block1">
@@ -125,7 +129,11 @@
             <div class="hd fix city-salary">
               <h2 class="title l">当前城市公司情况分布</h2>
             </div>
-            <div id="company-info" class="bd flex-1 chart-content"></div>
+            <div
+              v-if="companyStatus"
+              id="company-info"
+              class="bd flex-1 chart-content"
+            ></div>
           </div>
           <div
             class="comBox block block-6"
@@ -151,7 +159,11 @@
                 </el-option>
               </el-select>
             </div>
-            <div id="work-wordcloud" class="bd flex-1 chart-content"></div>
+            <div
+              v-if="eduOrExpData"
+              id="work-wordcloud"
+              class="bd flex-1 chart-content"
+            ></div>
           </div>
         </el-col>
       </el-row>
@@ -184,11 +196,11 @@ export default {
       options: [
         {
           value: 1,
-          label: "工作经验"
+          label: "学历要求"
         },
         {
           value: 2,
-          label: "学历要求"
+          label: "工作经验"
         }
       ],
       selectName: 1,
@@ -206,7 +218,6 @@ export default {
       switch (nav.type) {
         case "isLink":
           this.$router.replace({ name: name });
-          console.log(name);
           break;
         case "isMethod":
           if (name == "logout") {
@@ -281,7 +292,7 @@ export default {
         },
         visualMap: {
           min: 0,
-          max: 600,
+          max: 300,
           calculable: true,
           inRange: {
             color: ["#50a3ba", "#eac736", "#d94e5d"]
@@ -315,7 +326,7 @@ export default {
             coordinateSystem: "geo",
             data: convertData(data),
             symbolSize: function(val) {
-              return val[2] / 30;
+              return val[2] / 20;
             },
             label: {
               normal: {
@@ -343,7 +354,7 @@ export default {
               })
             ),
             symbolSize: function(val) {
-              return val[2] / 30;
+              return val[2] / 20;
             },
             showEffectOn: "render",
             rippleEffect: {
@@ -497,10 +508,12 @@ export default {
     },
 
     fetchData() {
-      this.getCityWorkCount();
-      this.getMapCityWorkCount();
-      this.getCompanyCount();
-      this.getEduOrExpCount();
+      if (this.$route.path === "/index") {
+        this.getCityWorkCount();
+        this.getMapCityWorkCount();
+        this.getCompanyCount();
+        this.getEduOrExpCount();
+      }
     }
   },
   created() {

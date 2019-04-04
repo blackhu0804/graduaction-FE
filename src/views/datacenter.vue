@@ -50,7 +50,11 @@ export default {
           cid: 4
         }
       ],
-      activeCat: 1
+      activeCat: 1,
+      dialogFormVisible: false,
+      form: {
+        name: ""
+      }
     };
   },
   methods: {},

@@ -5,10 +5,11 @@
       <div class="title">代理IP管理</div>
     </div>
     <div class="bd flex-1 scrollbar data-mainContent">
-      <el-button style="margin: 10px 0;" type="primary" size="small"
-        >爬取最新代理</el-button
-      >
-      <el-button style="margin: 10px 10px;" type="primary" size="small"
+      <el-button
+        style="margin: 10px 10px;"
+        type="primary"
+        size="small"
+        @click="dialogShow"
         >手动添加代理</el-button
       >
       <el-table
@@ -55,11 +56,20 @@ export default {
         p: 1,
         pageSize: 10
       },
-      totalRows: 0
+      totalRows: 0,
+      dialogFormVisible: false,
+      form: {
+        name: "",
+        region: ""
+      }
     };
   },
   methods: {
     jumpDetail() {},
+    dialogShow() {
+      console.log(this);
+      this.$emit("dialogShow");
+    },
     getTableData(isReload) {
       if (isReload) {
         this.queryParam.p = 1;
@@ -157,5 +167,18 @@ export default {
 .el-pager li.btn-quicknext,
 .el-pager li.btn-quickprev {
   color: #fff;
+}
+.el-dialog {
+  background: #010c26;
+  color: #fff;
+  box-shadow: 0 0 12px #3ca7dd inset;
+}
+.el-dialog .el-pagination .btn-next,
+.el-dialog .el-pagination .btn-prev {
+  background: transparent;
+}
+.el-dialog .el-dialog__title {
+  font-weight: 700;
+  color: #3f87bd;
 }
 </style>

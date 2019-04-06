@@ -48,19 +48,21 @@
       :append-to-body="true"
       width="30vw"
     >
-      <el-form :model="ipInfo" label-width="80px">
-        <el-form-item label="代理协议">
+      <el-form :model="ipInfo" ref="ipInfo" label-width="80px" :rules="rules">
+        <el-form-item label="代理协议" prop="protocol">
           <el-input v-model="ipInfo.protocol"></el-input>
         </el-form-item>
-        <el-form-item label="代理IP">
+        <el-form-item label="代理IP" prop="ip">
           <el-input v-model="ipInfo.ip"></el-input>
         </el-form-item>
-        <el-form-item label="代理端口">
+        <el-form-item label="代理端口" prop="port">
           <el-input v-model="ipInfo.port"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addProxy">确 定</el-button>
+          <el-button type="primary" @click="addProxy('ipInfo')"
+            >确 定</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -71,6 +73,18 @@
 import * as dataManage from "../api/datamanage.js";
 export default {
   data() {
+    var validateIP = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("IP地址不能为空"));
+      }
+      let regex = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/;
+      if (!regex.test(value)) {
+        return callback(new Error("IP地址不合法"));
+      } else {
+        callback();
+      }
+    };
+
     return {
       loading: false,
       list: [],
@@ -84,6 +98,18 @@ export default {
         protocol: "",
         ip: "",
         port: ""
+      },
+      rules: {
+        protocol: {
+          required: true,
+          message: "请输入协议类型",
+          trigger: "blur"
+        },
+        ip: [
+          { required: true, message: "请输入IP地址", trigger: "blur" },
+          { validator: validateIP, trigger: "blur" }
+        ],
+        port: { required: true, message: "请输入端口", trigger: "blur" }
       }
     };
   },
@@ -105,15 +131,24 @@ export default {
       this.queryParam.p = value;
       this.getTableData();
     },
-    addProxy() {
-      dataManage.addProxy(this.ipInfo).then(res => {
-        this.dialogFormVisible = false;
-        this.getTableData();
-        Object.keys(this.ipInfo).forEach(key => (this.ipInfo[key] = ""));
-        this.$message({
-          message: res.data.msg,
-          type: "success"
-        });
+    addProxy(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          dataManage.addProxy(this.ipInfo).then(res => {
+            if (res.data.code === 0) {
+              this.dialogFormVisible = false;
+              this.getTableData();
+              Object.keys(this.ipInfo).forEach(key => (this.ipInfo[key] = ""));
+              this.$message({
+                message: res.data.msg,
+                type: "success"
+              });
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
       });
     }
   },

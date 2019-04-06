@@ -23,3 +23,7 @@ export const addProxy = params => {
 export const deleteProxy = params => {
   return instance.post("/deleteProxy", params);
 };
+
+export const updateProxy = params => {
+  return instance.post("/updateProxy", params);
+};

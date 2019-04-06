@@ -64,7 +64,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addProxy('ipInfo')"
+          <el-button type="primary" @click="addAndUpProxy('ipInfo')"
             >确 定</el-button
           >
         </el-form-item>
@@ -118,7 +118,13 @@ export default {
     };
   },
   methods: {
-    jumpDetail() {},
+    jumpDetail(row) {
+      this.ipInfo.protocol = row.proxy.split(":")[0];
+      this.ipInfo.ip = row.proxy.split("//")[1].split(":")[0];
+      this.ipInfo.port = row.proxy.split(":")[2];
+      this.ipInfo._id = row._id;
+      this.dialogFormVisible = true;
+    },
     deleteProxy(row) {
       console.log(row);
       this.$confirm("此操作将删除此IP，确认删除？", "提示", {
@@ -142,6 +148,7 @@ export default {
     },
     dialogShow() {
       this.dialogFormVisible = true;
+      this.ipInfo._id = "";
     },
     getTableData(isReload) {
       if (isReload) {
@@ -156,20 +163,38 @@ export default {
       this.queryParam.p = value;
       this.getTableData();
     },
-    addProxy(formName) {
+    addAndUpProxy(formName, isUpdate) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          dataManage.addProxy(this.ipInfo).then(res => {
-            if (res.data.code === 0) {
-              this.dialogFormVisible = false;
-              this.getTableData();
-              Object.keys(this.ipInfo).forEach(key => (this.ipInfo[key] = ""));
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-            }
-          });
+          if (!this.ipInfo._id) {
+            dataManage.addProxy(this.ipInfo).then(res => {
+              if (res.data.code === 0) {
+                this.dialogFormVisible = false;
+                this.getTableData();
+                Object.keys(this.ipInfo).forEach(
+                  key => (this.ipInfo[key] = "")
+                );
+                this.$message({
+                  message: res.data.msg,
+                  type: "success"
+                });
+              }
+            });
+          } else {
+            dataManage.updateProxy(this.ipInfo).then(res => {
+              if (res.data.code === 0) {
+                this.dialogFormVisible = false;
+                this.getTableData();
+                Object.keys(this.ipInfo).forEach(
+                  key => (this.ipInfo[key] = "")
+                );
+                this.$message({
+                  message: res.data.msg,
+                  type: "success"
+                });
+              }
+            });
+          }
         } else {
           console.log("error submit!!");
           return false;

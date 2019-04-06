@@ -27,6 +27,10 @@
             <el-button type="text" @click="jumpDetail(scope.row)"
               >修改</el-button
             >
+
+            <el-button type="text" @click="deleteProxy(scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -115,6 +119,27 @@ export default {
   },
   methods: {
     jumpDetail() {},
+    deleteProxy(row) {
+      console.log(row);
+      this.$confirm("此操作将删除此IP，确认删除？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          dataManage.deleteProxy({ proxy: row.proxy }).then(res => {
+            console.log(res.data);
+            if (res.data.code === 0) {
+              this.getTableData();
+              this.$message({
+                type: "success",
+                message: res.data.msg
+              });
+            }
+          });
+        })
+        .catch(() => {});
+    },
     dialogShow() {
       this.dialogFormVisible = true;
     },

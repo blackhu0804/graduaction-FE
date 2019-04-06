@@ -15,3 +15,7 @@ export const getUserList = params => {
 export const getProxyList = params => {
   return instance.post("/getProxyList", params);
 };
+
+export const addProxy = params => {
+  return instance.post("/addProxy", params);
+};

@@ -42,6 +42,28 @@
         </el-pagination>
       </div>
     </div>
+
+    <el-dialog
+      :visible.sync="dialogFormVisible"
+      :append-to-body="true"
+      width="30vw"
+    >
+      <el-form :model="ipInfo" label-width="80px">
+        <el-form-item label="代理协议">
+          <el-input v-model="ipInfo.protocol"></el-input>
+        </el-form-item>
+        <el-form-item label="代理IP">
+          <el-input v-model="ipInfo.ip"></el-input>
+        </el-form-item>
+        <el-form-item label="代理端口">
+          <el-input v-model="ipInfo.port"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addProxy">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -58,17 +80,17 @@ export default {
       },
       totalRows: 0,
       dialogFormVisible: false,
-      form: {
-        name: "",
-        region: ""
+      ipInfo: {
+        protocol: "",
+        ip: "",
+        port: ""
       }
     };
   },
   methods: {
     jumpDetail() {},
     dialogShow() {
-      console.log(this);
-      this.$emit("dialogShow");
+      this.dialogFormVisible = true;
     },
     getTableData(isReload) {
       if (isReload) {
@@ -82,6 +104,17 @@ export default {
     handleCurrentChange(value) {
       this.queryParam.p = value;
       this.getTableData();
+    },
+    addProxy() {
+      dataManage.addProxy(this.ipInfo).then(res => {
+        this.dialogFormVisible = false;
+        this.getTableData();
+        Object.keys(this.ipInfo).forEach(key => (this.ipInfo[key] = ""));
+        this.$message({
+          message: res.data.msg,
+          type: "success"
+        });
+      });
     }
   },
   created() {

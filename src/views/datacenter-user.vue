@@ -28,7 +28,11 @@
         <el-table-column prop="username" label="用户名" align="center">
         </el-table-column>
         <el-table-column prop="email" label="邮箱"> </el-table-column>
-        <el-table-column prop="createTime" label="创建时间"> </el-table-column>
+        <el-table-column prop="createTime" label="创建时间">
+          <template slot-scope="scope">
+            {{ scope.row.createTime | dateformat }}
+          </template>
+        </el-table-column>
         <el-table-column prop="href" label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="jumpDetail(scope.row)"

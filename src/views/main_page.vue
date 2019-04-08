@@ -180,6 +180,7 @@ import "echarts/map/js/china.js";
 import location from "../assets/location.js";
 import { setInterval } from "timers";
 import * as getCityData from "../api/data.js";
+import * as account from "../api/account.js";
 export default {
   data() {
     return {
@@ -235,7 +236,9 @@ export default {
         type: "info"
       })
         .then(() => {
-          this.$emit("logout");
+          account.signOut().then(res => {
+            this.$router.replace({ path: "/login" });
+          });
         })
         .catch(() => {});
     },

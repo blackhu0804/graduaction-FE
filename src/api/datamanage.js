@@ -27,3 +27,7 @@ export const deleteProxy = params => {
 export const updateProxy = params => {
   return instance.post("/updateProxy", params);
 };
+
+export const getWorkDetail = params => {
+  return instance.post('/getWorkInfo', params)
+}

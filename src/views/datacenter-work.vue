@@ -1,5 +1,5 @@
 <template>
-  <div class="comBox flex-1" v-loading="loading">
+  <div class="comBox flex-1 work" v-loading="loading">
     <div class="corner"></div>
     <div class="hd">
       <div class="title">职位管理</div>
@@ -92,6 +92,15 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog
+      :visible.sync="dialogFormVisible"
+      :append-to-body="true"
+      width="30vw"
+      title="职位描述"
+      class="work-dialog"
+    >
+      <div v-html="detail"></div>
+    </el-dialog>
   </div>
 </template>
 
@@ -101,6 +110,7 @@ import { log } from "util";
 export default {
   data() {
     return {
+      dialogFormVisible: false,
       loading: false,
       list: [],
       cityList: [],
@@ -128,12 +138,18 @@ export default {
         exp: "",
         edu: ""
       },
-      totalRows: 0
+      totalRows: 0,
+      detail: undefined
     };
   },
   methods: {
     jumpDetail(href) {
-      window.open(href);
+      dataManage.getWorkDetail({url: href}).then( res => {
+        this.dialogFormVisible = true
+        this.detail = res.data.data.workInfo
+      })
+      
+      // window.open(href);
     },
     getCityList() {
       dataManage.getCityList().then(res => {
@@ -174,10 +190,19 @@ export default {
 };
 </script>
 
-<style  >
+<style>
+* {box-sizing: border-box;}
 .bd {
   overflow-x: hidden;
   overflow-y: auto;
+}
+.work-dialog .el-dialog__body {
+  height: 60vh;
+  padding: 5px 15px 20px;
+  overflow: auto;
+}
+.work-dialog .el-dialog__body h3 {
+  display: none;
 }
 .data-mainContent {
   height: 100%;

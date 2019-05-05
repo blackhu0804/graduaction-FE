@@ -196,10 +196,24 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
 }
+.el-dialog {
+  background: #010c26;
+  color: #fff;
+  box-shadow: 0 0 12px #3ca7dd inset;
+}
+.el-dialog .el-pagination .btn-next,
+.el-dialog .el-pagination .btn-prev {
+  background: transparent;
+}
+.el-dialog .el-dialog__title {
+  font-weight: 700;
+  color: #3f87bd;
+}
 .work-dialog .el-dialog__body {
   height: 60vh;
   padding: 5px 15px 20px;
   overflow: auto;
+  color: #fff;
 }
 .work-dialog .el-dialog__body h3 {
   display: none;

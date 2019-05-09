@@ -100,6 +100,9 @@
       class="work-dialog"
     >
       <div v-html="detail"></div>
+      <div class="learn-more">
+        <el-button type="primary" @click="learnMore">查看更多信息</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -139,7 +142,8 @@ export default {
         edu: ""
       },
       totalRows: 0,
-      detail: undefined
+      detail: undefined,
+      href: ''
     };
   },
   methods: {
@@ -147,9 +151,11 @@ export default {
       dataManage.getWorkDetail({url: href}).then( res => {
         this.dialogFormVisible = true
         this.detail = res.data.data.workInfo
+        this.href = href
       })
-      
-      // window.open(href);
+    },
+    learnMore(){
+      window.open(this.href);
     },
     getCityList() {
       dataManage.getCityList().then(res => {
@@ -290,5 +296,9 @@ export default {
 .el-pager li.btn-quicknext,
 .el-pager li.btn-quickprev {
   color: #fff;
+}
+.learn-more {
+  text-align: center;
+  padding-top: 10px;
 }
 </style>

@@ -295,7 +295,7 @@ export default {
         },
         visualMap: {
           min: 0,
-          max: 300,
+          max: 1500,
           calculable: true,
           inRange: {
             color: ["#50a3ba", "#eac736", "#d94e5d"]
@@ -324,13 +324,13 @@ export default {
         },
         series: [
           {
-            name: "pm2.5",
-            type: "scatter",
+            type: "effectScatter",
             coordinateSystem: "geo",
-            data: convertData(data),
-            symbolSize: function(val) {
-              return val[2] / 20;
-            },
+            data: convertData(
+              data.sort(function(a, b) {
+                return b.value - a.value;
+              })
+            ),
             label: {
               normal: {
                 formatter: "{b}",
@@ -341,23 +341,8 @@ export default {
                 show: true
               }
             },
-            itemStyle: {
-              emphasis: {
-                borderColor: "#fff",
-                borderWidth: 1
-              }
-            }
-          },
-          {
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            data: convertData(
-              data.sort(function(a, b) {
-                return b.value - a.value;
-              })
-            ),
             symbolSize: function(val) {
-              return val[2] / 20;
+              return val[2] / 50;
             },
             showEffectOn: "render",
             rippleEffect: {

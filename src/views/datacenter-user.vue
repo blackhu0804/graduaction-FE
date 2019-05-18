@@ -33,13 +33,13 @@
             {{ scope.row.createTime | dateformat }}
           </template>
         </el-table-column>
-        <el-table-column prop="href" label="操作" align="center">
+        <!-- <el-table-column prop="href" label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="jumpDetail(scope.row)"
               >详情</el-button
             >
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <!-- 分页 -->
       <div class="page">
